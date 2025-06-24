@@ -4,14 +4,12 @@ const nextConfig: NextConfig = {
   // Optimize for Vercel deployment
   output: 'standalone',
 
-  // Enable experimental features for better performance
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  // Enable turbopack for better performance
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
     },
   },

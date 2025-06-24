@@ -22,7 +22,6 @@ function RoomContent() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isSystemAudio, setIsSystemAudio] = useState(false);
   const [systemAudioStreamer, setSystemAudioStreamer] = useState<SystemAudioStreamer | null>(null);
-  const [receivedAudioChunks, setReceivedAudioChunks] = useState<Blob[]>([]);
   const [systemAudioElement, setSystemAudioElement] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ function RoomContent() {
           syncToAudioData(audioData);
         });
 
-        socketManager.onTrackLoad((trackUrl, trackName) => {
+        socketManager.onTrackLoad((trackUrl) => {
           if (audioRef.current) {
             audioRef.current.src = trackUrl;
             setAudioUrl(trackUrl);
@@ -95,33 +94,14 @@ function RoomContent() {
             systemAudioElement.src = '';
             setSystemAudioElement(null);
           }
-          setReceivedAudioChunks([]);
         });
 
-        socketManager.onAudioChunk((audioData, timestamp) => {
+        socketManager.onAudioChunk((audioData) => {
           if (!currentUser?.isAdmin && systemAudioElement) {
             // Convert base64 back to blob and play
             const audioBlob = base64ToBlob(audioData);
             const audioUrl = URL.createObjectURL(audioBlob);
-
-            // Add to received chunks for continuous playback
-            setReceivedAudioChunks(prev => {
-              const newChunks = [...prev, audioBlob];
-
-              // Keep only recent chunks to prevent memory issues
-              if (newChunks.length > 10) {
-                newChunks.shift();
-              }
-
-              // Create combined audio for smoother playback
-              if (newChunks.length > 1) {
-                const combinedBlob = new Blob(newChunks, { type: 'audio/webm' });
-                const combinedUrl = URL.createObjectURL(combinedBlob);
-                systemAudioElement.src = combinedUrl;
-              }
-
-              return newChunks;
-            });
+            systemAudioElement.src = audioUrl;
           }
         });
 
@@ -154,7 +134,7 @@ function RoomContent() {
       socketManager.leaveRoom();
       socketManager.disconnect();
     };
-  }, [searchParams, router]);
+  }, [searchParams, router, currentUser?.isAdmin, systemAudioElement]);
 
   const syncToAudioData = (audioData: AudioSyncData) => {
     if (!audioRef.current || isSyncing) return;
@@ -288,19 +268,25 @@ function RoomContent() {
       });
 
       // Manually set up the streamer with microphone stream
-      streamer.mediaRecorder = new MediaRecorder(stream, {
+      const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus',
         audioBitsPerSecond: 128000
       });
 
-      streamer.mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0 && streamer.onDataCallback) {
-          streamer.onDataCallback(event.data);
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          // Handle audio data for streaming
+          blobToBase64(event.data).then(base64Data => {
+            socketManager.streamAudioChunk(base64Data);
+          }).catch(console.error);
         }
       };
 
-      streamer.mediaRecorder.start(100);
-      streamer.isRecording = true;
+      mediaRecorder.start(100);
+
+      // Store reference for cleanup
+      (streamer as any).mediaRecorder = mediaRecorder;
+      (streamer as any).isRecording = true;
 
       setSystemAudioStreamer(streamer);
       setIsSystemAudio(true);

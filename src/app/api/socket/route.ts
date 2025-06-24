@@ -1,12 +1,8 @@
-import { NextRequest } from 'next/server';
-import { Server as SocketIOServer } from 'socket.io';
-import { createServer } from 'http';
-
 // This is a simplified version for Vercel
 // For full Socket.IO functionality, you'll need a separate server deployment
 
-export async function GET(request: NextRequest) {
-  return new Response(JSON.stringify({ 
+export async function GET() {
+  return new Response(JSON.stringify({
     message: 'Socket.IO endpoint - Deploy server.js separately for full functionality',
     status: 'info',
     instructions: [
@@ -20,8 +16,8 @@ export async function GET(request: NextRequest) {
   });
 }
 
-export async function POST(request: NextRequest) {
-  return new Response(JSON.stringify({ 
+export async function POST() {
+  return new Response(JSON.stringify({
     message: 'Socket.IO POST endpoint',
     status: 'info'
   }), {

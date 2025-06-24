@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface RoomInfo {
   id: string;
@@ -74,12 +75,12 @@ export default function DebugPage() {
               >
                 {loading ? 'Refreshing...' : 'Refresh'}
               </button>
-              <a
+              <Link
                 href="/"
                 className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </div>
           
@@ -159,7 +160,7 @@ export default function DebugPage() {
               <h3 className="font-semibold text-white mb-2">"Room not found" error:</h3>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>Check if the room code is typed correctly (case-insensitive)</li>
-                <li>Ensure the room creator hasn't left (rooms close when admin leaves)</li>
+                <li>Ensure the room creator hasn&apos;t left (rooms close when admin leaves)</li>
                 <li>Verify both devices are connected to the same network</li>
                 <li>Try refreshing both devices and creating a new room</li>
               </ul>
@@ -178,7 +179,7 @@ export default function DebugPage() {
             <div>
               <h3 className="font-semibold text-white mb-2">System audio not working:</h3>
               <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Ensure you check "Share audio" when prompted</li>
+                <li>Ensure you check &quot;Share audio&quot; when prompted</li>
                 <li>Use Chrome or Edge for best compatibility</li>
                 <li>Make sure audio is actually playing on your computer</li>
                 <li>Try restarting the system audio stream</li>

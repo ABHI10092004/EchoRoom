@@ -83,7 +83,7 @@ class SocketManager {
         return;
       }
 
-      this.socket.emit('create-room', { roomName, userName }, (response: any) => {
+      this.socket.emit('create-room', { roomName, userName }, (response: { success: boolean; roomId?: string; user?: User; error?: string }) => {
         if (response.success) {
           this.currentRoom = response.roomId;
           this.currentUser = response.user;
@@ -102,7 +102,7 @@ class SocketManager {
         return;
       }
 
-      this.socket.emit('join-room', { roomId, userName }, (response: any) => {
+      this.socket.emit('join-room', { roomId, userName }, (response: { success: boolean; room?: Room; user?: User; error?: string }) => {
         if (response.success) {
           this.currentRoom = roomId;
           this.currentUser = response.user;

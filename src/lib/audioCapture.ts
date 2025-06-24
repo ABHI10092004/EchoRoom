@@ -55,7 +55,7 @@ export class SystemAudioCapture {
           autoGainControl: false,
           sampleRate: 44100,
           channelCount: 2
-        } as any
+        } as MediaStreamConstraints['audio']
       });
 
       // Check if audio track is available
@@ -169,7 +169,7 @@ export class SystemAudioStreamer {
           noiseSuppression: false,
           autoGainControl: false,
           sampleRate: 44100
-        } as any
+        } as MediaStreamConstraints['audio']
       });
 
       // Check if audio track is available

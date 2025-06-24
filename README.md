@@ -1,4 +1,4 @@
-# 🎵 SyncIt - Synchronized Audio Streaming
+# 🎵 EchoRoom - Synchronized Audio Streaming
 
 A real-time audio synchronization platform that allows you to stream audio from one device to multiple connected devices simultaneously. Perfect for listening parties, collaborative music sessions, and synchronized audio experiences.
 
@@ -45,8 +45,8 @@ A real-time audio synchronization platform that allows you to stream audio from 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ABHI10092004/syncit.git
-   cd syncit
+   git clone https://github.com/ABHI10092004/EchoRoom.git
+   cd EchoRoom
    ```
 
 2. **Install dependencies**
@@ -141,7 +141,7 @@ For optimal experience:
 
 ### Project Structure
 ```
-syncit/
+EchoRoom/
 ├── src/
 │   ├── app/                 # Next.js app directory
 │   │   ├── page.tsx        # Home page

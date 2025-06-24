@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "syncit",
+  "name": "echoroom",
   "builds": [
     {
       "src": "package.json",
